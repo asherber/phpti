@@ -20,7 +20,7 @@
 Template Inheritance usually involves two separate templates, each in their own file: the *parent* template and the *child*template. The parent contains the HTML skeleton and markers for where content should go. These markers are called *blocks*. The child then “fills-in” the blocks with content. Example:
 
 ```php
-// base.php (the parent)
+// BASE.PHP (the parent)
 <?php require_once 'ti.php' ?>
 <html>
 <body>
@@ -36,7 +36,8 @@ Template Inheritance usually involves two separate templates, each in their own 
 </body>
 </html>
     
-// page.php (the child)    
+    
+// PAGE.PHP (the child)    
 <?php include 'base.php' ?>
 
 <?php startblock('title') ?>
@@ -47,7 +48,8 @@ Template Inheritance usually involves two separate templates, each in their own 
    This is the article
 <?php endblock() ?>
     
-// page.php's output
+    
+// PAGE.PHP's output
 <html>
 <body>
   <h1>
@@ -88,7 +90,7 @@ The following three ways of defining an empty block are all equivalent:
 You won’t always want your child template to fill in every one of your parent’s blocks. Sometimes you’ll want the parent to contribute content instead. This content is called *default* content. Example:
 
 ```php
-// base.php
+// BASE.PHP
 <?php require_once 'ti.php' ?>
 <html>
 <body>
@@ -103,14 +105,16 @@ You won’t always want your child template to fill in every one of your parent�
 </body>
 </html>
     
-// page.php
+    
+// PAGE.PHP
 <?php include 'base.php' ?>
 
 <?php startblock('main') ?>
    The main content
 <?php endblock() ?>
 
-// page.php's output
+
+// PAGE.PHP's output
 <html>
 <body>
   <div id='main'>
@@ -128,7 +132,7 @@ As you can see, the child doesn’t define a footer block, so the parent’s foo
 However, if the child *did* decide to define a footer, it would *override* the parent’s. Example:
 
 ```php
-// base.php
+// BASE.PHP
 <?php require_once 'ti.php' ?>
 <html>
 <body>
@@ -143,7 +147,8 @@ However, if the child *did* decide to define a footer, it would *override* the p
 </body>
 </html>
     
-// page.php
+    
+// PAGE.PHP
 <?php include 'base.php' ?>
 
 <?php startblock('main') ?>
@@ -154,7 +159,8 @@ However, if the child *did* decide to define a footer, it would *override* the p
    Custom footer!!!
 <?php endblock() ?>
     
-// page.php's output
+    
+// PAGE.PHP's output
 <html>
 <body>
   <div id='main'>
@@ -180,7 +186,7 @@ If you have a block with high resource demands (such as database calls) and you 
 We have seen that a parent’s block can either be kept as-is, or overridden by a child’s block. However, what if you wanted to keep a parent’s block *and* incorporate additional content? This is possible by calling the `superblock`function from within a block. It will insert the overriden block’s content into the output. Example:
 
 ```php
-// base.php
+// BASE.PHP
 <?php require_once 'ti.php' ?>
 <html>
 <body>
@@ -189,8 +195,9 @@ We have seen that a parent’s block can either be kept as-is, or overridden by 
   <?php endblock() ?>
 </body>
 </html>
+
     
-// page.php
+// PAGE.PHP
 <?php include 'base.php' ?>
 
 <?php startblock('top') ?>
@@ -198,7 +205,8 @@ We have seen that a parent’s block can either be kept as-is, or overridden by 
    <h2>The Second Title</h2>
 <?php endblock() ?>
     
-// page.php's output
+    
+// PAGE.PHP's output
 <html>
 <body>
    <h1>The Main Title</h1>
@@ -214,7 +222,7 @@ An additional function exists called `getsuperblock`. This is the same as `super
 A block’s content usually consists of HTML, but it can also consists of other blocks as well. These blocks-within-blocks are called *nested* blocks, and they function very similarly to normal blocks:
 
 ```php
-// base.php
+// BASE.PHP
 <?php require_once 'ti.php' ?>
 
 <html>
@@ -225,7 +233,8 @@ A block’s content usually consists of HTML, but it can also consists of other 
 </body>
 </html>
     
-// 2col.php
+    
+// 2COL.PHP
 <?php include 'base.php' ?>
 
 <?php startblock('content') ?>
@@ -241,7 +250,8 @@ A block’s content usually consists of HTML, but it can also consists of other 
    </table>
 <?php endblock() ?>    
     
-// page.php
+    
+// PAGE.PHP
 <?php include '2col.php' ?>
 
 <?php startblock('left') ?>
@@ -252,7 +262,8 @@ A block’s content usually consists of HTML, but it can also consists of other 
    right content
 <?php endblock() ?>
     
-// page.php's output
+    
+// PAGE.PHP's output
 <html>
 <body>
 <div id='content'>
@@ -280,7 +291,7 @@ You’ve seen the basic usage of `startblock` and `endblock`, but you have not y
 A filter function allows you to modify a block’s content before it is sent to the output. It is a function that accepts a single string argument (the content of the block) and must return a string that will be sent to the output. Here is a barebones example:
 
 ```php
-// page.php
+// PAGE.PHP
 <?php  
   require_once 'ti.php';
 
@@ -298,7 +309,8 @@ A filter function allows you to modify a block’s content before it is sent to 
   </div>
 </body>
     
-// page.php's output
+    
+// PAGE.PHP's output
 <html>
 <body>
   <div id='content'>
@@ -348,7 +360,7 @@ As with the PHP language, all output is sent to the browser by default. However,
 *PHP Template Inheritance* strives to provide a very intuitive API. However, there is one situation in which it might get confused, so you’ll need to give it a hint. This situation occurs when you have a base template that has no blocks. **You must call the blockbase() function** in the base template in order to make things work. Example:
 
 ```php
-// base.php
+// BASE.PHP
 <?php require_once 'ti.php' ?>
 
 <?php blockbase() ?>
@@ -359,20 +371,19 @@ As with the PHP language, all output is sent to the browser by default. However,
 </body>
 </html>
     
-// page.php
+    
+// PAGE.PHP
 <?php include 'base.php' ?>
 
 <?php startblock('content') ?>
    Block that doesn''t do anything
 <?php endblock() ?>
 
-// page.php's output
+
+// PAGE.PHP's output
 <html>
 <body>
   There are no blocks!
 </body>
 </html>       
 ```
-
-
-
